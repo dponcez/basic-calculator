@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <!-- Basic Page Needs -->
+  <meta charset='UTF-8'>
+  <meta name='description' content=''>
+  <meta name='author' content=''>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <!-- Mobile Specific Metas -->
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <title>Calculator</title>
+  <!-- Fonts -->
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Abel&family=Play&display=swap'>
+  <!-- CSS -->
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'>
+  <link rel='stylesheet' href='css/styles.css'>
+</head>
+<body>
+  <div class='container'>
+    <div class="calculator">
+      <input type="text" class="display" value="0" data-display>
+      <div class="keys--container">
+        <button class="key" data-cleaner="clear">c</button>
+        <!-- Memory Keys -->
+        <button class="key" data-memory-keys="memory-cancel">mc</button>
+        <button class="key" data-memory-keys="add-memory">m+</button>
+        <button class="key" data-memory-keys="sub-memory">m-</button>
+        <button class="key" data-memory-keys="recall-memory">mr</button>
+        <!-- Number Keys -->
+        <button class="key" data-number="seven">&#55;</button>
+        <button class="key" data-number="eight">&#56;</button>
+        <button class="key" data-number="nine">&#57;</button>
+        <button class="key" data-number="four">&#52;</button>
+        <button class="key" data-number="five">&#53;</button>
+        <button class="key" data-number="six">&#54;</button>
+        <button class="key" data-number="one">&#49;</button>
+        <button class="key" data-number="two">&#50;</button>
+        <button class="key" data-number="three">&#51;</button>
+        <button class="key" data-number="zero">&#48;</button>
+        <button class="key" data-decimal="decimal">&#46;</button>
+        <!-- Operator Keys -->
+        <button class="key" data-operators="minus">&#45;</button>
+        <button class="key" data-operators="division">&#47;</button>
+        <button class="key" data-operators="product">&#88;</button>
+        <button class="key" data-operators="addition">&#43;</button>
+        <button class="key" data-operators="equal">&#61;</button>
+      </div>
+    </div>
+  </div>
+  <script src='js/main.js'></script>
+</body>
+</html>

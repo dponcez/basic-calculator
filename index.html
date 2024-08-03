@@ -11,7 +11,7 @@
   <link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon">
   <title>Calculator</title>
   <!-- Fonts -->
-  <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Abel&family=Play&display=swap'>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Play&family=Orbitron&display=swap'>
   <!-- CSS -->
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'>
   <link rel='stylesheet' href='css/styles.css'>
@@ -19,93 +19,76 @@
 <body>
   <div class='container'>
     <div class="calculator">
-      <input type="text" class="display" value="0" data-display>
+      <div class="display--container">
+        <input type="text" class="display" value="0" data-display disabled>
+        <span class="mirror"></span>
+      </div>
+      <h2 class="title">studio <span>963m</span></h2>
       <div class="keys--container">
         <button class="key" data-cleaner="clear">
-          <span class="edge"></span>
           <span class="front">c</span>
         </button>
         <!-- Memory Keys -->
         <button class="key" data-memory-keys="memory-cancel">
-          <span class="edge"></span>
           <span class="front">mc</span>
         </button>
         <button class="key" data-memory-keys="add-memory">
-          <span class="edge"></span>
           <span class="front">m+</span>
         </button>
         <button class="key" data-memory-keys="sub-memory">
-          <span class="edge"></span>
           <span class="front">m-</span>
         </button>
         <button class="key" data-memory-keys="recall-memory">
-          <span class="edge"></span>
           <span class="front">mr</span>
         </button>
         <!-- Number Keys -->
         <button class="key" data-number="seven">
-          <span class="edge"></span>
           <span class="front">&#55;</span>
         </button>
         <button class="key" data-number="eight">
-          <span class="edge"></span>
           <span class="front">&#56;</span>
         </button>
         <button class="key" data-number="nine">
-          <span class="edge"></span>
           <span class="front">&#57;</span>
         </button>
         <button class="key" data-number="four">
-          <span class="edge"></span>
           <span class="front">&#52;</span>
         </button>
         <button class="key" data-number="five">
-          <span class="edge"></span>
           <span class="front">&#53;</span>
         </button>
         <button class="key" data-number="six">
-          <span class="edge"></span>
           <span class="front">&#54;</span>
         </button>
         <button class="key" data-number="one">
-          <span class="edge"></span>
           <span class="front">&#49;</span>
         </button>
         <button class="key" data-number="two">
-          <span class="edge"></span>
           <span class="front">&#50;</span>
         </button>
         <button class="key" data-number="three">
-          <span class="edge"></span>
           <span class="front">&#51;</span>
         </button>
         <button class="key" data-number="zero">
-          <span class="edge"></span>
           <span class="front">&#48;</span>
         </button>
         <button class="key" data-decimal="decimal">
-          <span class="edge"></span>
           <span class="front">&#46;</span>
         </button>
         <!-- Operator Keys -->
         <button class="key" data-operators="minus">
-          <span class="edge"></span>
           <span class="front">&#45;</span>
         </button>
         <button class="key" data-operators="division">
-          <span class="edge"></span>
           <span class="front">&#47;</span>
         </button>
         <button class="key" data-operators="product">
-          <span class="edge"></span>
           <span class="front">&#88;</span>
         </button>
         <button class="key" data-operators="addition">
-          <span class="edge"></span>
           <span class="front">&#43;</span>
         </button>
         <button class="key" data-operators="equal">
-          <span class="edge"></span>
           <span class="front">&#61;</span>
         </button>
       </div>

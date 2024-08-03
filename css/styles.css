@@ -6,6 +6,7 @@
   --wd: 6rem;
   --unit: 5;
   --fnt-sz: calc(var(--pd) * var(--unit) / 3);
+  --fnt-orbitron: 'Orbitron', sans-serif;
   --fnt-play: 'Play', sans-serif;
   --light-gray-color: hsl(70, 7%, 83%);
   --mid-light-gray-color: hsl(60, 8%, 77%);
@@ -34,32 +35,65 @@
   grid-template-rows: 8rem 1fr;
   width: calc(var(--wd) * 3.75);
   height: calc(var(--wd) * 6.25);
+  position: relative;
   background-image: linear-gradient(
     90deg,
     var(--mid-light-gray-color),
     var(--light-gray-color)
   );
+  border: .15vmin solid var(--dark-gray-color);
   border-radius: calc(var(--rd) * .5);
+  box-shadow: .25vmin .25vmin .5rem 0 rgba(0, 0, 0, .5),
+    1vmin 1vmin .75rem var(--dark-gray-color) inset,
+    -1vmin 0 1rem var(--mid-light-gray-color) inset;
   .display,
   .keys--container { grid-column: span 2 }
-  .display {
+  .display--container {
     grid-row: 1;
     display: flex;
     align-items: center;
-    width: calc(var(--wd) * 3.025);
-    height: calc(var(--wd) * .75);
     position: relative;
-    padding-inline-end: var(--pd);
-    border: none;
-    background-image: linear-gradient(
-      45deg,
-      hsl(0, 33%, 1%),
-      hsl(150, 100%, 6%)
-    );
-    color: var(--light-orange-color);
-    text-align: right;
-    outline: none;
-    font: 700 var(--fnt-sz) var(--fnt-play);
+    .display {
+      width: calc(var(--wd) * 3.025);
+      height: calc(var(--wd) * .75);
+      padding-inline-end: var(--pd);
+      border: none;
+      background-image: linear-gradient(
+        45deg,
+        hsl(0, 33%, 1%),
+        hsl(150, 100%, 6%)
+      );
+      color: var(--light-orange-color);
+      text-align: right;
+      outline: none;
+      font: 700 var(--fnt-sz) var(--fnt-play);
+      appearance: none;
+    }
+    .mirror {
+      width: calc(var(--wd) * 3.025);
+      height: calc(var(--wd) * .75);
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-image: linear-gradient(
+        45deg,
+        hsla(0, 6%, 43%, 0.5) 0%,
+        hsl(0, 18%, 71%) 40%,
+        hsla(0, 28%, 81%, .25) 80%,
+        hsla(0, 35%, 9%, 0.4) 100%
+      );
+      filter: blur(.2rem)
+    }
+  }
+  .title {
+    position: absolute;
+    top: 25%;
+    right: 25%;
+    transform: translate(10%, 5%);
+    font: 200 calc(var(--fnt-sz) * .75) var(--fnt-play);
+    text-transform: uppercase;
+    z-index: 2;
+    & span { font-weight: 800 }
   }
   .keys--container {
     grid-row: 2;
@@ -67,17 +101,34 @@
     place-items: center;
     grid-template-columns: repeat(4, 1fr);
     width: calc(var(--wd) * 3);
-    height: calc(var(--wd) * 4.3);
-    gap: calc(var(--rd) * .0125);
+    height: calc(var(--wd) * 4.5);
+    position: relative;
     border: .1lh solid var(--dark-gray-color);
     border-radius: calc(var(--rd) * .7);
     background-image: linear-gradient(
       45deg,
-      hsl(90, 29%, 3%),
-      hsl(60, 7%, 3%),
-      hsl(140, 27%, 4%)
+      hsl(0, 36%, 4%) 0%,
+      hsl(0, 25%, 2%) 8%,
+      hsl(0, 25%, 2%) 92%,
+      hsl(0, 36%, 4%) 100%
     );
     box-shadow: 0 0 0 .25vmin var(--light-gray-color) inset, 0 0 .25vmin 0 var(--dark-gray-color);
+    &::before {
+      content: '';
+      width: calc(var(--wd) * 2.24);
+      height: calc(var(--wd) * .72);
+      position: absolute;
+      top: -.1rem;
+      right: -.15rem;
+      background-image: linear-gradient(
+        90deg,
+        var(--mid-light-gray-color),
+        var(--light-gray-color)
+      );
+      border-radius: 0 0 0 calc(var(--rd) * .7);
+      border: .15lh solid transparent;
+      border-color: transparent transparent var(--dark-gray-color) var(--dark-gray-color);
+    }
     .key {
       display: flex;
       align-items: center;
@@ -86,15 +137,31 @@
       height: calc(var(--wd) * .68);
       border-radius: calc(var(--rd) * .8);
       border: none;
-      font: 200 calc(var(--fnt-sz) * .9) var(--fnt-play);
-      text-transform: uppercase;
       cursor: pointer;
+      transition: transform 350ms cubic-bezier(.3, .7, .4, 1);
+      box-shadow: -.25vmin -1vmin .5rem hsla(0, 0%, 0%, 0.5) inset, .25vmin -.25vmin .5rem hsla(90, 29%, 3%, .5) inset, -.15vmin -.15vmin .7rem hsla(0, 33%, 98%, 0.25) inset;
+      .front {
+        font: 200 calc(var(--fnt-sz) * .75) var(--fnt-orbitron);
+        text-transform: uppercase;
+        will-change: transform;
+        transform: translateY(-.125em);
+        transition: transform 600ms cubic-bezier(.3, .7, .4, 1.5);
+      }
+      &:active { 
+        transform: scale(.99);
+        box-shadow: -.23vmin -.95vmin .45rem hsla(0, 0%, 0%, 0.45) inset, .23vmin -.23vmin .45rem hsla(90, 29%, 3%, .45) inset, -.12vmin -.12vmin .7rem hsla(0, 33%, 98%, 0.25) inset;
+      }
+      &:active .front {
+        transform: translateY(-.0625em);
+        transition: transform 35ms
+      }
+      &:focus:not(:focus-visible) { outline: none; }
       &:nth-child(-n + 5) {
         background-image: linear-gradient(
           45deg,
-          var(--light-orange-color),
-          hsl(37, 84%, 60%),
-          hsl(29, 72%, 58%)
+          var(--dark-orange-color) 0%,
+          var(--light-orange-color) 50%,
+          hsl(37, 92%, 64%) 100%
         );
         color: var(--light-color);
       }

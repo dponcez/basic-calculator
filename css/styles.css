@@ -29,12 +29,12 @@
   display: flex;
   align-items: center
 }
-:where(.title, .mirror) { position: absolute; }
+:where(.title, .mirror, .prev--value, .current--value) { position: absolute; }
 :where(.display, .mirror) {
   width: calc(var(--wd) * 3.025);
   height: calc(var(--wd) * .75)
 }
-:where(.display--container, .keys--container) { position: relative; }
+:where(.display, .display--container, .keys--container) { position: relative; }
 
 .container { height: var(--svh); }
 
@@ -69,8 +69,9 @@
         hsl(0, 33%, 1%),
         hsl(150, 100%, 6%)
       );
+      overflow: hidden;
       .prev--value,
-      .current--value { text-align: right; }
+      .current--value { right: 1rem; }
       .prev--value {
         margin-block-start: calc(var(--pd) * .25); 
         color: var(--light-color);

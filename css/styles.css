@@ -13,7 +13,7 @@
   --dark-gray-color: hsl(109, 4%, 50%);
   --light-orange-color: hsl(34, 82%, 59%);
   --dark-orange-color: hsl(21, 95%, 41%);
-  --light-color: hsl(0, 0%, 100%)
+  --light-color: hsl(0, 0%, 100%);
 }
 
 *,
@@ -21,16 +21,24 @@
 *::after { box-sizing: border-box; }
 
 :where(html, body) { margin: 0; }
-
-.container {
+:where(.container, .calculator, .keys--container) {
   display: grid;
   place-items: center;
-  height: var(--svh);
 }
+:where(.display--container, .key) {
+  display: flex;
+  align-items: center
+}
+:where(.title, .mirror) { position: absolute; }
+:where(.display, .mirror) {
+  width: calc(var(--wd) * 3.025);
+  height: calc(var(--wd) * .75)
+}
+:where(.display--container, .keys--container) { position: relative; }
+
+.container { height: var(--svh); }
 
 .calculator {
-  display: grid;
-  place-items: center;
   grid-template-columns: 1fr;
   grid-template-rows: 8rem 1fr;
   width: calc(var(--wd) * 3.75);
@@ -50,12 +58,10 @@
   .keys--container { grid-column: span 2 }
   .display--container {
     grid-row: 1;
-    display: flex;
-    align-items: center;
-    position: relative;
     .display {
-      width: calc(var(--wd) * 3.025);
-      height: calc(var(--wd) * .75);
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(2, 1fr);
       padding-inline-end: var(--pd);
       border: none;
       background-image: linear-gradient(
@@ -63,30 +69,33 @@
         hsl(0, 33%, 1%),
         hsl(150, 100%, 6%)
       );
-      color: var(--light-orange-color);
-      text-align: right;
-      outline: none;
-      font: 700 var(--fnt-sz) var(--fnt-play);
-      appearance: none;
+      .prev--value,
+      .current--value { text-align: right; }
+      .prev--value {
+        margin-block-start: calc(var(--pd) * .25); 
+        color: var(--light-color);
+        font: 500 calc(var(--fnt-sz) * .6) var(--fnt-play); 
+      }
+      .current--value {
+        grid-row: 2;
+        color: var(--light-orange-color);
+        font: 700 var(--fnt-sz) var(--fnt-orbitron);
+      }
     }
     .mirror {
-      width: calc(var(--wd) * 3.025);
-      height: calc(var(--wd) * .75);
-      position: absolute;
       top: 0;
       left: 0;
       background-image: linear-gradient(
         45deg,
-        hsla(0, 6%, 43%, 0.5) 0%,
-        hsl(0, 18%, 71%) 40%,
-        hsla(0, 28%, 81%, .25) 80%,
-        hsla(0, 35%, 9%, 0.4) 100%
+        hsla(0, 5%, 43%, .5) 0%,
+        hsla(0, 25%, 35%, .5) 40%,
+        hsla(0, 8%, 25%, .25) 80%,
+        hsla(0, 35%, 9%, .4) 100%
       );
       filter: blur(.2rem)
     }
   }
   .title {
-    position: absolute;
     top: 25%;
     right: 25%;
     transform: translate(10%, 5%);
@@ -97,12 +106,9 @@
   }
   .keys--container {
     grid-row: 2;
-    display: grid;
-    place-items: center;
     grid-template-columns: repeat(4, 1fr);
     width: calc(var(--wd) * 3);
     height: calc(var(--wd) * 4.5);
-    position: relative;
     border: .1lh solid var(--dark-gray-color);
     border-radius: calc(var(--rd) * .7);
     background-image: linear-gradient(
@@ -130,8 +136,6 @@
       border-color: transparent transparent var(--dark-gray-color) var(--dark-gray-color);
     }
     .key {
-      display: flex;
-      align-items: center;
       justify-content: center;
       width: calc(var(--wd) * .68);
       height: calc(var(--wd) * .68);

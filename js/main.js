@@ -10,9 +10,9 @@ const initApp = () => {
     currentValue: selector("[data-current-value]"),
     clearBtn: selector("[data-cleaner]"),
     decimal: selector("[data-decimal]"),
-    numberBtns: selectorAll("[data-number]"),
-    operatorBtns: selectorAll("[data-operator]"),
-    memoryKeyBtns: selectorAll("[data-memory-key]"),
+    numberKeys: selectorAll("[data-number]"),
+    operatorKeys: selectorAll("[data-operator]"),
+    memoryKeys: selectorAll("[data-memory-key]"),
   };
 
   const {
@@ -21,11 +21,13 @@ const initApp = () => {
     currentValue,
     clearBtn,
     decimal,
-    numberBtns,
-    operatorBtns,
-    memoryKeyBtns
+    numberKeys,
+    operatorKeys,
+    memoryKeys
   } = htmlRefs;
+  
   let operation;
+  let memory = 0;
 
   const appendNumber = (number) => {
     currentValue.innerText === '0' ?
@@ -75,30 +77,56 @@ const initApp = () => {
     currentValue.innerText = result;
   }
 
-  numberBtns.forEach(operand => {
-    eventHandler(operand, 'click', () => {
-      const context = operand.innerText;
-      if(currentValue.innerText === 'Error!'){
-        currentValue.innerText = context;
-        return
-      }
-      appendNumber(context)
-    })
-  });
-
-  operatorBtns.forEach(operand => {
-    eventHandler(operand, 'click', () => {
-      const context = operand.innerText;
-      chooseOperation(context);
-    })
-  });
-
-  eventHandler(clearBtn, 'click', () => {
+  const handleMemoryClear = () => {
+    memory = 0;
     currentValue.innerText = '0';
     previousValue.innerText = '0'
-  });
+  }
 
-  eventHandler(equalBtn, 'click', () => {
+  const handleAddMemory = (value) => {
+    memory += parseFloat(value.innerText);
+    currentValue.innerText = memory.toString();
+    log(currentValue)
+  }
+
+  const handleSubMemory = (value) => {
+    memory -= parseFloat(value.innerText);
+    currentValue.innerText = memory.toString();
+  }
+
+  const handleMemoryRecall = () => {
+    currentValue.innerText = memory.toString();
+    previousValue.innerText = memory.toString()
+  }
+
+  const handleClickNumbers = (operand) => {
+    const context = operand.innerText;
+
+    if(currentValue.innerText === 'Error!'){
+      currentValue.innerText = context;
+      return;
+    }
+
+    appendNumber(context)
+  }
+
+  const handleOperators = (operand) => {
+    const context = operand.innerText;
+    chooseOperation(context);
+  }
+
+  const handleDecimalPoint = () => {
+    const context = decimal.innerText;
+    appendNumber(context);
+  }
+
+  const handleClearDisplay = () => {
+    memory = 0;
+    currentValue.innerText = '0';
+    previousValue.innerText = '0'
+  }
+
+  const handleSetEqual = () => {
     if(currentValue.innerText === '0'){
       currentValue.innerText = 'Error!';
       return;
@@ -114,7 +142,39 @@ const initApp = () => {
         log(`There is an output error: ${error}`)
       }
     }
+  }
+
+  numberKeys.forEach(operand => {
+    eventHandler(operand, 'click', () => handleClickNumbers(operand))
+  });
+
+  operatorKeys.forEach(operand => {
+    eventHandler(operand, 'click', () => handleOperators(operand))
+  });
+
+  memoryKeys.forEach(key => {
+    const suffix = key.dataset.memoryKey;
+
+    if(suffix === 'memory-clear'){
+      eventHandler(key, 'click', handleMemoryClear);
+    } 
+
+    if(suffix === 'add-memory'){ 
+      eventHandler(key, 'click', () => handleAddMemory(currentValue));
+    }
+
+    if(suffix === 'sub-memory'){
+      eventHandler(key, 'click', () => handleSubMemory(currentValue));
+    }
+
+    if(suffix === 'recall-memory'){
+      eventHandler(key, 'click', handleMemoryRecall);
+    } 
   })
+
+  eventHandler(decimal, 'click', handleDecimalPoint)
+  eventHandler(clearBtn, 'click', handleClearDisplay);
+  eventHandler(equalBtn, 'click', handleSetEqual)
 }
 
 document.addEventListener('DOMContentLoaded', initApp);

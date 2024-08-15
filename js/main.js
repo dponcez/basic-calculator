@@ -9,7 +9,6 @@ const initApp = () => {
     previousValue: selector("[data-prev-value]"),
     currentValue: selector("[data-current-value]"),
     clearBtn: selector("[data-cleaner]"),
-    decimal: selector("[data-decimal]"),
     numberKeys: selectorAll("[data-number]"),
     operatorKeys: selectorAll("[data-operator]"),
     memoryKeys: selectorAll("[data-memory-key]"),
@@ -20,7 +19,6 @@ const initApp = () => {
     previousValue,
     currentValue,
     clearBtn,
-    decimal,
     numberKeys,
     operatorKeys,
     memoryKeys
@@ -28,8 +26,11 @@ const initApp = () => {
   
   let operation;
   let memory = 0;
+  let period = '.'
 
   const appendNumber = (number) => {
+    if(number === period && currentValue.innerText.includes(period)) return;
+
     currentValue.innerText === '0' ?
       currentValue.innerText = number :
       currentValue.innerText += number;
@@ -74,7 +75,7 @@ const initApp = () => {
       log(`An error occured when we tried to parse the result: ${error}`)
     }
 
-    currentValue.innerText = result;
+    previousValue.innerText = result;
   }
 
   const handleMemoryClear = () => {
@@ -86,7 +87,6 @@ const initApp = () => {
   const handleAddMemory = (value) => {
     memory += parseFloat(value.innerText);
     currentValue.innerText = memory.toString();
-    log(currentValue)
   }
 
   const handleSubMemory = (value) => {
@@ -115,13 +115,6 @@ const initApp = () => {
     chooseOperation(context);
   }
 
-  const handleDecimalPoint = (number) => {
-    const decimalPoint = decimal.innerText;
-    if(number === decimalPoint && currentValue.innerText.includes(decimalPoint)) return;
-
-    appendNumber(decimalPoint);
-  }
-
   const handleClearDisplay = () => {
     memory = 0;
     currentValue.innerText = '0';
@@ -137,7 +130,7 @@ const initApp = () => {
         const compute = computeOperation();
         const operation = new Function(compute);
         const result = operation();
-        previousValue.innerText = '';
+        currentValue.innerText = '0';
 
         return result;
       } catch (error) {
@@ -174,7 +167,6 @@ const initApp = () => {
     } 
   })
 
-  eventHandler(decimal, 'click', handleDecimalPoint)
   eventHandler(clearBtn, 'click', handleClearDisplay);
   eventHandler(equalBtn, 'click', handleSetEqual)
 }

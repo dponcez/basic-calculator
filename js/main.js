@@ -115,9 +115,11 @@ const initApp = () => {
     chooseOperation(context);
   }
 
-  const handleDecimalPoint = () => {
-    const context = decimal.innerText;
-    appendNumber(context);
+  const handleDecimalPoint = (number) => {
+    const decimalPoint = decimal.innerText;
+    if(number === decimalPoint && currentValue.innerText.includes(decimalPoint)) return;
+
+    appendNumber(decimalPoint);
   }
 
   const handleClearDisplay = () => {

@@ -14,6 +14,7 @@
   --light-orange-color: hsl(34, 82%, 59%);
   --dark-orange-color: hsl(21, 95%, 41%);
   --light-color: hsl(0, 0%, 100%);
+  --red-color: hsl(9, 86%, 42%);
 }
 
 *,
@@ -80,7 +81,7 @@
       .current--value {
         grid-row: 2;
         color: var(--light-orange-color);
-        font: 700 var(--fnt-sz) var(--fnt-orbitron);
+        font: 700 calc(var(--fnt-sz) * .85) var(--fnt-orbitron);
       }
     }
     .mirror {
@@ -95,15 +96,6 @@
       );
       filter: blur(.2rem)
     }
-  }
-  .title {
-    top: 25%;
-    right: 25%;
-    transform: translate(10%, 5%);
-    font: 200 calc(var(--fnt-sz) * .75) var(--fnt-play);
-    text-transform: uppercase;
-    z-index: 2;
-    & span { font-weight: 800 }
   }
   .keys--container {
     grid-row: 2;
@@ -120,22 +112,6 @@
       hsl(0, 36%, 4%) 100%
     );
     box-shadow: 0 0 0 .25vmin var(--light-gray-color) inset, 0 0 .25vmin 0 var(--dark-gray-color);
-    &::before {
-      content: '';
-      width: calc(var(--wd) * 2.24);
-      height: calc(var(--wd) * .72);
-      position: absolute;
-      top: -.1rem;
-      right: -.15rem;
-      background-image: linear-gradient(
-        90deg,
-        var(--mid-light-gray-color),
-        var(--light-gray-color)
-      );
-      border-radius: 0 0 0 calc(var(--rd) * .7);
-      border: .15lh solid transparent;
-      border-color: transparent transparent var(--dark-gray-color) var(--dark-gray-color);
-    }
     .key {
       justify-content: center;
       width: calc(var(--wd) * .68);
@@ -161,7 +137,7 @@
         transition: transform 35ms
       }
       &:focus:not(:focus-visible) { outline: none; }
-      &:nth-child(-n + 5) {
+      &.orange--btn {
         background-image: linear-gradient(
           45deg,
           var(--dark-orange-color) 0%,
@@ -170,16 +146,21 @@
         );
         color: var(--light-color);
       }
-      &:nth-child(n + 6) {
+      &.dark--gray__btn {
         background-color: var(--dark-gray-color);
         color: var(--light-color);
       }
-      &:nth-child(n + 17) {
+      &.light--gray__btn {
         background-color: var(--light-gray-color);
         color: var(--dark-gray-color)
       }
-      &:first-child {
-        grid-column: 1;
+      &.red--btn { 
+        background-color: var(--red-color);
+        &.power--on { background-color: hsl(103, 82%, 48%)}
+      }
+      &:first-child { grid-column: 1; }
+      &:first-child,
+      &:nth-child(22) {
         grid-row: 1
       }
       &:nth-child(2),
@@ -216,6 +197,10 @@
       &:nth-child(18),
       &:nth-child(19),
       &:nth-child(20) { grid-column: 4}
+      &:nth-child(22) { 
+        grid-column: 2 / 4;
+        width: var(--sz)
+      }
     }
   }
 }

@@ -156,7 +156,7 @@
       }
       &.red--btn { 
         background-color: var(--red-color);
-        &.power--on { background-color: hsl(103, 82%, 48%)}
+        &.power--on { color: hsl(103, 82%, 48%)}
       }
       &:first-child { grid-column: 1; }
       &:first-child,

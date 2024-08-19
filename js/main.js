@@ -1,174 +1,154 @@
-const initApp = () => {
-  const log = (value) => console.log(value);
-  const selector = (element) => document.querySelector(element);
-  const selectorAll = (element) => document.querySelectorAll(element);
-  const eventHandler = ($, event, callback) => $.addEventListener(event, callback);
+class Calculator {
+  constructor(first_value, second_value){
+    this.first_value = first_value;
+    this.second_value = second_value;
 
-  const htmlRefs = {
-    equalBtn: selector('[data-equal]'),
-    previousValue: selector("[data-prev-value]"),
-    currentValue: selector("[data-current-value]"),
-    clearBtn: selector("[data-cleaner]"),
-    numberKeys: selectorAll("[data-number]"),
-    operatorKeys: selectorAll("[data-operator]"),
-    memoryKeys: selectorAll("[data-memory-key]"),
-  };
-
-  const {
-    equalBtn,
-    previousValue,
-    currentValue,
-    clearBtn,
-    numberKeys,
-    operatorKeys,
-    memoryKeys
-  } = htmlRefs;
-  
-  let operation;
-  let memory = 0;
-  let period = '.'
-
-  const appendNumber = (number) => {
-    if(number === period && currentValue.innerText.includes(period)) return;
-
-    currentValue.innerText === '0' ?
-      currentValue.innerText = number :
-      currentValue.innerText += number;
+    this.clearDisplay()
   }
 
-  const chooseOperation = (operand) => {
-    if(currentValue.innerText === '0') return;
-    computeOperation(operand);
+  clearDisplay(){
+    this.previousValue = 0;
+    this.currentValue = 0;
+    this.operand = '';
 
-    operation = operand;
-    currentValue.innerText += operand;
-    previousValue.innerText = currentValue.innerText;
-    currentValue.innerText = '0'
+    this.updateDisplay()
   }
 
-  const computeOperation = () => {
-    let result;
-    const displayCurrentValue = parseFloat(currentValue.innerText);
-    const displayPreviousValue = parseFloat(previousValue.innerText);
+  deleteElement(){
+    if(this.currentValue === 0) return;
+    this.currentValue = +this.currentValue.toString().slice(0, -1);
 
-    if(isNaN(displayCurrentValue) || isNaN(displayPreviousValue)) return;
+    this.updateDisplay()
+  }
 
+  appendNumber(number){
+    if(number === '.' && this.second_value.textContent.contains('.')) return;
+
+    this.currentValue = this.currentValue === 0 ?
+      this.currentValue = number :
+      this.currentValue.toString() + number;
+
+    this.updateDisplay();
+  }
+
+  operation(operand){
+    if(this.operand){
+      this.calculate()
+    }
+
+    this.operand = operand;
+    this.previousValue = +this.currentValue === 0 ?
+      this.previousValue : 
+      this.currentValue;
+    this.currentValue = 0;
+
+    this.updateDisplay();
+  }
+
+  calculate(){
     try {
-      switch(operation) {
+      switch(this.operand){
         case '+':
-          result = displayPreviousValue + displayCurrentValue;
+          this.previousValue = +this.previousValue + +this.currentValue;
           break;
         case '-':
-          result = displayPreviousValue - displayCurrentValue;
+          this.previousValue = +this.previousValue - +this.currentValue
           break;
         case '*':
-          result = displayPreviousValue * displayCurrentValue;
+          this.previousValue = +this.previousValue * +this.currentValue;
           break;
         case '/':
-          result = displayPreviousValue / displayCurrentValue;
-          break;
-        default:
-          return;
+          this.previousValue = +this.previousValue / +this.currentValue;
+          break
       }
 
+      this.operand = '';
+      this.currentValue = 0;
+      
     } catch (error) {
-      log(`An error occured when we tried to parse the result: ${error}`)
+      console.log(error)
     }
 
-    previousValue.innerText = result;
+    this.updateDisplay()
   }
 
-  const handleMemoryClear = () => {
-    memory = 0;
-    currentValue.innerText = '0';
-    previousValue.innerText = '0'
+  updateDisplay(){
+    this.first_value.textContent = this.previousValue + this.operand;
+    this.second_value.textContent = this.currentValue;
   }
-
-  const handleAddMemory = (value) => {
-    memory += parseFloat(value.innerText);
-    currentValue.innerText = memory.toString();
-  }
-
-  const handleSubMemory = (value) => {
-    memory -= parseFloat(value.innerText);
-    currentValue.innerText = memory.toString();
-  }
-
-  const handleMemoryRecall = () => {
-    currentValue.innerText = memory.toString();
-    previousValue.innerText = memory.toString()
-  }
-
-  const handleClickNumbers = (operand) => {
-    const context = operand.innerText;
-
-    if(currentValue.innerText === 'Error!'){
-      currentValue.innerText = context;
-      return;
-    }
-
-    appendNumber(context)
-  }
-
-  const handleOperators = (operand) => {
-    const context = operand.innerText;
-    chooseOperation(context);
-  }
-
-  const handleClearDisplay = () => {
-    memory = 0;
-    currentValue.innerText = '0';
-    previousValue.innerText = '0'
-  }
-
-  const handleSetEqual = () => {
-    if(currentValue.innerText === '0'){
-      currentValue.innerText = 'Error!';
-      return;
-    }else {
-      try {
-        const compute = computeOperation();
-        const operation = new Function(compute);
-        const result = operation();
-        currentValue.innerText = '0';
-
-        return result;
-      } catch (error) {
-        log(`There is an output error: ${error}`)
-      }
-    }
-  }
-
-  numberKeys.forEach(operand => {
-    eventHandler(operand, 'click', () => handleClickNumbers(operand))
-  });
-
-  operatorKeys.forEach(operand => {
-    eventHandler(operand, 'click', () => handleOperators(operand))
-  });
-
-  memoryKeys.forEach(key => {
-    const suffix = key.dataset.memoryKey;
-
-    if(suffix === 'memory-clear'){
-      eventHandler(key, 'click', handleMemoryClear);
-    } 
-
-    if(suffix === 'add-memory'){ 
-      eventHandler(key, 'click', () => handleAddMemory(currentValue));
-    }
-
-    if(suffix === 'sub-memory'){
-      eventHandler(key, 'click', () => handleSubMemory(currentValue));
-    }
-
-    if(suffix === 'recall-memory'){
-      eventHandler(key, 'click', handleMemoryRecall);
-    } 
-  })
-
-  eventHandler(clearBtn, 'click', handleClearDisplay);
-  eventHandler(equalBtn, 'click', handleSetEqual)
 }
 
-document.addEventListener('DOMContentLoaded', initApp);
+const initApp = () => {
+  // tesing
+  const log = (value) => console.log(value);
+  // selectors
+  const selector = (element) => document.querySelector(element);
+  const selectorAll = (element) => document.querySelectorAll(element);
+  // event
+  const eventHandler = ($, event, callback) => $.addEventListener(event, callback);
+
+  // html references
+  const htmlRefs = {
+    displayFirstValue: selector('[data-prev-value]'),
+    displaySecondValue: selector('[data-current-value]'),
+    clearBtn: selector('[data-cleaner]'),
+    deleteBtn: selector('[data-delete]'),
+    powerBtn: selector('[data-power]'),
+    equalBtn: selector('[data-equal]'),
+    memoryKeys: selectorAll('[data-memory-key]'),
+    numberKeys: selectorAll('[data-number]'),
+    operatorKeys: selectorAll('[data-operator]')
+  }
+
+  const {
+    displayFirstValue,
+    displaySecondValue,
+    clearBtn,
+    deleteBtn,
+    powerBtn,
+    equalBtn,
+    memoryKeys,
+    numberKeys,
+    operatorKeys
+  } = htmlRefs;
+
+  
+  eventHandler(powerBtn, 'click', () => {
+    if(powerBtn.classList.contains('power--on')){
+      powerBtn.classList.remove('power--on')
+    }else{
+      powerBtn.classList.add('power--on');
+
+      const calculator = new Calculator(displayFirstValue, displaySecondValue);
+    
+      eventHandler(clearBtn, 'click', () => {
+        calculator.clearDisplay();
+      })
+
+      eventHandler(deleteBtn, 'click', () => {
+        calculator.deleteElement()
+      });
+
+      numberKeys.forEach(number => {
+        eventHandler(number, 'click', () => {
+          const context = number.textContent;
+          calculator.appendNumber(context)
+        })
+      })
+
+      operatorKeys.forEach(operator => {
+        eventHandler(operator, 'click', () => {
+          const context = operator.textContent;
+          calculator.operation(context);
+        })
+      });
+
+      eventHandler(equalBtn, 'click', () => {
+        calculator.calculate()
+      })
+    }
+  })
+
+}
+
+document.addEventListener('DOMContentLoaded', initApp)

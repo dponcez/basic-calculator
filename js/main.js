@@ -1,86 +1,93 @@
 class Calculator {
-  constructor(first_value, second_value){
+  constructor(first_value, second_value) {
     this.first_value = first_value;
     this.second_value = second_value;
 
-    this.clearDisplay()
+    this.clearDisplay();
   }
 
-  clearDisplay(){
+  clearDisplay() {
     this.previousValue = 0;
     this.currentValue = 0;
-    this.operand = '';
-
-    this.updateDisplay()
-  }
-
-  deleteElement(){
-    if(this.currentValue === 0) return;
-    this.currentValue = +this.currentValue.toString().slice(0, -1);
-
-    this.updateDisplay()
-  }
-
-  appendNumber(number){
-    if(number === '.' && this.second_value.textContent.contains('.')) return;
-
-    this.currentValue = this.currentValue === 0 ?
-      this.currentValue = number :
-      this.currentValue.toString() + number;
+    this.operand = "";
 
     this.updateDisplay();
   }
 
-  operation(operand){
-    if(this.operand){
-      this.calculate()
+  updateDisplay() {
+    this.first_value.innerHTML = this.previousValue + this.operand;
+    this.second_value.innerHTML = this.currentValue;
+  }
+
+  powerOff(){
+    this.previousValue = "";
+    this.currentValue = "";
+    this.operand = ""
+
+    this.updateDisplay();
+  }
+
+  appendNumber(number) {
+    if (number === "." && this.currentValue.includes(".")) return;
+
+    this.currentValue =
+      this.currentValue === 0 ? number : this.currentValue.toString() + number;
+
+    this.updateDisplay();
+  }
+
+  deleteElement() {
+    if (this.currentValue === 0) return;
+    this.currentValue = +this.currentValue.toString().slice(0, -1);
+
+    this.updateDisplay();
+  }
+
+  operation(operand) {
+    if (this.operand) {
+      this.calculate();
     }
 
     this.operand = operand;
-    this.previousValue = +this.currentValue === 0 ?
-      this.previousValue : 
-      this.currentValue;
+    this.previousValue =
+      +this.currentValue === 0 ? this.previousValue : this.currentValue;
     this.currentValue = 0;
 
     this.updateDisplay();
   }
 
-  calculate(){
+  calculate() {
+    const previous = parseFloat(this.previousValue);
+    const current = parseFloat(this.currentValue);
+    if (isNaN(previous) || isNaN(current)) return;
+
     try {
-      switch(this.operand){
-        case '+':
+      switch (this.operand) {
+        case "+":
           this.previousValue = +this.previousValue + +this.currentValue;
           break;
-        case '-':
-          this.previousValue = +this.previousValue - +this.currentValue
+        case "-":
+          this.previousValue = +this.previousValue - +this.currentValue;
           break;
-        case '*':
+        case "*":
           this.previousValue = +this.previousValue * +this.currentValue;
           break;
-        case '/':
+        case "/":
           this.previousValue = +this.previousValue / +this.currentValue;
-          break
+          break;
       }
 
-      this.operand = '';
+      this.operand = "";
       this.currentValue = 0;
-      
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
 
-    this.updateDisplay()
-  }
-
-  updateDisplay(){
-    this.first_value.textContent = this.previousValue + this.operand;
-    this.second_value.textContent = this.currentValue;
+    this.updateDisplay();
   }
 }
 
 const initApp = () => {
-  // tesing
-  const log = (value) => console.log(value);
   // selectors
   const selector = (element) => document.querySelector(element);
   const selectorAll = (element) => document.querySelectorAll(element);
@@ -112,10 +119,14 @@ const initApp = () => {
     operatorKeys
   } = htmlRefs;
 
+  const calculator = new Calculator(displayFirstValue, displaySecondValue);
   
   eventHandler(powerBtn, 'click', () => {
     if(powerBtn.classList.contains('power--on')){
-      powerBtn.classList.remove('power--on')
+      powerBtn.classList.remove('power--on');
+
+      calculator.powerOff();
+
     }else{
       powerBtn.classList.add('power--on');
 
@@ -131,14 +142,14 @@ const initApp = () => {
 
       numberKeys.forEach(number => {
         eventHandler(number, 'click', () => {
-          const context = number.textContent;
+          const context = number.innerText;
           calculator.appendNumber(context)
         })
       })
 
       operatorKeys.forEach(operator => {
         eventHandler(operator, 'click', () => {
-          const context = operator.textContent;
+          const context = operator.innerText;
           calculator.operation(context);
         })
       });

@@ -2,6 +2,7 @@ class Calculator {
   constructor(first_value, second_value) {
     this.first_value = first_value;
     this.second_value = second_value;
+    this.memory = 0;
 
     this.clearDisplay();
   }
@@ -25,6 +26,10 @@ class Calculator {
     this.operand = ""
 
     this.updateDisplay();
+  }
+
+  log(value){
+    this.console = console.log(value)
   }
 
   appendNumber(number) {
@@ -59,6 +64,7 @@ class Calculator {
   calculate() {
     const previous = parseFloat(this.previousValue);
     const current = parseFloat(this.currentValue);
+    
     if (isNaN(previous) || isNaN(current)) return;
 
     try {
@@ -79,11 +85,49 @@ class Calculator {
 
       this.operand = "";
       this.currentValue = 0;
+
     } catch (error) {
-      console.log(error);
+      this.console(`An error occurred while trying to parse the result: ${error}`);
     }
 
     this.updateDisplay();
+  }
+
+  memoryClear(){
+    this.memory = 0;
+  }
+
+  addMemory(value){
+    const type = (typeof value === 'number') ? 
+      this.memory += parseFloat(value) :
+      this.console('The value must be a number')
+
+    this.previousValue = +this.memory.toString();
+
+    this.updateDisplay();
+    return type
+  }
+
+  subMemory(value){
+    const type = (typeof value === 'number') ? 
+      this.memory -= parseFloat(value) :
+      this.console('The value must be a number')
+    
+    this.previousValue = +this.memory.toString();
+
+    this.updateDisplay();
+    return type
+  }
+
+  memoryRecall(){
+    this.previousValue = +this.memory.toString();
+    this.currentValue = +this.memory.toString();
+
+    this.updateDisplay()
+  }
+
+  getMemory(){
+    return this.memory
   }
 }
 
@@ -120,6 +164,8 @@ const initApp = () => {
   } = htmlRefs;
 
   const calculator = new Calculator(displayFirstValue, displaySecondValue);
+
+  calculator.powerOff()
   
   eventHandler(powerBtn, 'click', () => {
     if(powerBtn.classList.contains('power--on')){
@@ -156,6 +202,47 @@ const initApp = () => {
 
       eventHandler(equalBtn, 'click', () => {
         calculator.calculate()
+      });
+
+      const handleMemoryClear = () => {
+        calculator.memoryClear()
+      }
+
+      const handleAddMemory = (value) => {
+        const context = parseFloat(value.innerText);
+        calculator.addMemory(context);
+        calculator.log(`Memory: ${calculator.getMemory()}`)
+      }
+
+      const handleSubMemory = (value) => {
+        const context = parseFloat(value.innerText);
+        calculator.subMemory(context);
+        calculator.log(`Memory: ${calculator.getMemory()}`)
+      }
+
+      const handleMemoryRecall = () => {
+        calculator.memoryRecall();
+        calculator.log(`Memory: ${calculator.getMemory()}`)
+      }
+
+      memoryKeys.forEach(key => {
+        const prefix = key.dataset.memoryKey;
+
+        switch (prefix) {
+          case 'memory-clear':
+            eventHandler(key, 'click', handleMemoryClear)
+            break;
+          case 'add-memory':
+            eventHandler(key, 'click', () => handleAddMemory(displayFirstValue))
+            break;
+          case 'sub-memory':
+            eventHandler(key, 'click', () => handleSubMemory(displayFirstValue));
+            break;
+          case 'recall-memory':
+            eventHandler(key, 'click', handleMemoryRecall)
+          default:
+            break;
+        }
       })
     }
   })

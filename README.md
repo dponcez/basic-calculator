@@ -14,9 +14,9 @@ For more information about the calculator, visit [what is a calculator?](https:/
 └── 📁basic-calculator
     └── 📁assets
         └── 📁images
-            └── block-keys.png
             └── block-one.png
             └── calculator.png
+            └── key-block.png
             └── memory-keys.png
             └── number-keys.png
             └── operator-keys.png
@@ -26,6 +26,11 @@ For more information about the calculator, visit [what is a calculator?](https:/
         └── styles.css
     └── 📁js
         └── main.js
+    └── 📁modules
+        └── calculator.js
+        └── custom_functions.js
+        └── debounce.js
+        └── index.js
     └── index.html
     └── README.md
 ```

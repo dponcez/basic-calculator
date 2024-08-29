@@ -13,8 +13,18 @@
   --dark-gray-color: hsl(109, 4%, 50%);
   --light-orange-color: hsl(34, 82%, 59%);
   --dark-orange-color: hsl(21, 95%, 41%);
-  --light-color: hsl(0, 0%, 100%);
+  --light-color: hsl(75, 40%, 98%);
   --red-color: hsl(9, 86%, 42%);
+  --dark-theme: linear-gradient(
+    90deg,
+    #0e0e10,
+    #121212
+  );
+  --light-theme: linear-gradient(
+    90deg,
+    var(--light-color),
+    var(var(--light-gray-color))
+  )
 }
 
 *,
@@ -30,14 +40,34 @@
   display: flex;
   align-items: center
 }
-:where(.title, .mirror, .prev--value, .current--value) { position: absolute; }
+:where(.switch--container, .title, .mirror, .prev--value, .current--value) { position: absolute; }
 :where(.display, .mirror) {
   width: calc(var(--wd) * 3.025);
   height: calc(var(--wd) * .75)
 }
 :where(.display, .display--container, .keys--container) { position: relative; }
 
-.container { height: var(--svh); }
+#light { background-image: var(--dark-theme) }
+#dark { background-image: var(--light-theme) }
+
+.container { 
+  height: var(--svh);
+  background-image: var(--light-theme);
+  .switch--container {
+    top: calc(var(--rd) * .975);
+    right: calc(var(--rd) * .8);
+    z-index: 2;
+    .dark--btn {
+      border: none;
+      background-color: transparent;
+      box-shadow: none;
+      cursor: pointer;
+    }
+  }
+}
+
+#dark .container { background-image: var(--light-color); }
+#light .container { background-image: var(--dark-color); }
 
 .calculator {
   grid-template-columns: 1fr;

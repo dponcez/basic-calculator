@@ -47,12 +47,10 @@
 }
 :where(.display, .display--container, .keys--container) { position: relative; }
 
-#light { background-image: var(--dark-theme) }
-#dark { background-image: var(--light-theme) }
-
 .container { 
   height: var(--svh);
   background-image: var(--light-theme);
+  &.dark { background-image: var(--dark-theme); }
   .switch--container {
     top: calc(var(--rd) * .975);
     right: calc(var(--rd) * .8);
@@ -65,9 +63,6 @@
     }
   }
 }
-
-#dark .container { background-image: var(--light-color); }
-#light .container { background-image: var(--dark-color); }
 
 .calculator {
   grid-template-columns: 1fr;

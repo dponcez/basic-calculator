@@ -36,11 +36,11 @@
   display: grid;
   place-items: center;
 }
-:where(.display--container, .key) {
+:where(.display--container, .dark--btn, .key) {
   display: flex;
   align-items: center
 }
-:where(.switch--container, .title, .mirror, .prev--value, .current--value) { position: absolute; }
+:where(.toggle--container, .title, .mirror, .prev--value, .current--value) { position: absolute; }
 :where(.display, .mirror) {
   width: calc(var(--wd) * 3.025);
   height: calc(var(--wd) * .75)
@@ -51,15 +51,47 @@
   height: var(--svh);
   background-image: var(--light-theme);
   &.dark { background-image: var(--dark-theme); }
-  .switch--container {
+  .toggle--container {
     top: calc(var(--rd) * .975);
-    right: calc(var(--rd) * .8);
+    right: calc(var(--rd) * 1.8);
     z-index: 2;
     .dark--btn {
+      align-items: center;
+      justify-content: space-between;
+      width: calc(var(--wd) * .65);
+      height: calc(var(--wd) * .35);
       border: none;
-      background-color: transparent;
+      background: var(--dark-theme);
+      border-radius: calc(var(--rd) * 2.5);
+      font-size: calc(var(--pd) * 1.0975);
       box-shadow: none;
       cursor: pointer;
+      position: relative;
+      &.active  { background: var(--light-color) }
+      & > .sun { color: var(--light-orange-color) }
+      & > .moon { color: var(--light-color) }
+      &::before {
+        content: '';
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: calc(var(--wd) * .295);
+        height: calc(var(--wd) * .295);
+        position: absolute;
+        top: 0.17rem;
+        left: 0.1rem;
+        background: var(--light-orange-color);
+        border-radius: calc(var(--rd) * 2.5);
+        transform-origin: center left;
+        transition: transform 300ms ease, background 200ms ease-out;
+      }
+      &.active::before {
+        left: .3rem;
+        transform: translateX(100%);
+        transform-origin: center right;
+        background: var(--dark-theme);
+        color: var(--light-orange-color);
+      }
     }
   }
 }
